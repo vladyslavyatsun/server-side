@@ -4,7 +4,6 @@ import org.traccar.Context;
 import org.traccar.api.BaseResource;
 import org.traccar.model.Geofence;
 
-import javax.annotation.security.PermitAll;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -16,19 +15,17 @@ import java.util.Collection;
 @Consumes(MediaType.APPLICATION_JSON)
 public class GeofenceResource extends BaseResource {
 
-    @PermitAll
     @GET
     public Collection<Geofence> get() throws SQLException {
-        /*if (Context.getPermissionsManager().isAdmin(1)) {*/
+        if (Context.getPermissionsManager().isAdmin(getUserId())) {
             return Context.getDataManager().getAllGeofences();
-        /*}
-        return Context.getDataManager().getGeofencesByUserId(1);*/
+        }
+        return Context.getDataManager().getGeofencesByUserId(getUserId());
     }
 
-    @PermitAll
     @POST
     public Response add(Geofence entity) throws SQLException {
-        entity.setUserId(1);
+        entity.setUserId(getUserId());
         Context.getDataManager().addGeofence(entity);
         return Response.ok(entity).build();
     }

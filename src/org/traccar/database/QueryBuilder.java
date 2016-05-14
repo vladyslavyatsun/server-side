@@ -269,6 +269,8 @@ public final class QueryBuilder {
                         setString(name, new GsonBuilder().create().toJson(coordinates));
                     } else if (method.getReturnType().equals(LocalDate.class)) {
                         setDate(name, ((LocalDate) method.invoke(object)).toDate());
+                    } else if (method.getReturnType().equals(Geofence.Type.class)) {
+                        setString(name, ((Geofence.Type) method.invoke(object)).name());
                     }
                 } catch (IllegalAccessException | InvocationTargetException error) {
                     Log.warning(error);

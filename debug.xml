@@ -194,8 +194,8 @@
     </entry>
 
     <entry key='database.insertGeofence'>
-        INSERT INTO geofence (name, coordinates, userId)
-        VALUES (:name, :coordinates, :userId);
+        INSERT INTO geofence (name, description, type, coordinates, radius, userId)
+        VALUES (:name, :description, :type, :coordinates, :radius, :userId);
     </entry>
 
     <entry key='database.selectGeofenceAll'>

@@ -62,9 +62,16 @@
       <column name="name" type="VARCHAR(128)">
         <constraints nullable="false" />
       </column>
+      <column name="description" type="VARCHAR(250)">
+        <constraints nullable="false" />
+      </column>
+      <column name="type" type="VARCHAR(15)">
+        <constraints nullable="false" />
+      </column>
       <column name="coordinates" type="VARCHAR(1000)">
         <constraints nullable="false" />
       </column>
+      <column name="radius" type="DOUBLE" />
       <column name="userid" type="INT">
         <constraints nullable="false" />
       </column>
