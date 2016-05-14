@@ -20,6 +20,7 @@ import org.eclipse.jetty.websocket.api.WebSocketAdapter;
 import org.traccar.Context;
 import org.traccar.database.ConnectionManager;
 import org.traccar.model.Device;
+import org.traccar.model.GeofenceEvent;
 import org.traccar.model.Position;
 import org.traccar.web.JsonConverter;
 
@@ -32,6 +33,7 @@ public class AsyncSocket extends WebSocketAdapter implements ConnectionManager.U
 
     private static final String KEY_DEVICES = "devices";
     private static final String KEY_POSITIONS = "positions";
+    private static final String KEY_GEOFENCE = "geofence";
 
     private long userId;
 
@@ -46,6 +48,10 @@ public class AsyncSocket extends WebSocketAdapter implements ConnectionManager.U
         sendData(KEY_POSITIONS, Context.getConnectionManager().getInitialState(userId));
 
         Context.getConnectionManager().addListener(userId, this);
+
+        if (Context.getGeofenceManager().getGeofences(userId) == null) {
+            Context.getGeofenceManager().loadGeofence(userId);
+        }
     }
 
     @Override
@@ -71,6 +77,11 @@ public class AsyncSocket extends WebSocketAdapter implements ConnectionManager.U
             json.add(key, JsonConverter.arrayToJson(data));
             getRemote().sendString(json.build().toString(), null);
         }
+    }
+
+    @Override
+    public void onChangeGeofence(GeofenceEvent event) {
+        sendData(KEY_GEOFENCE, Collections.singletonList(event));
     }
 
 }

@@ -55,5 +55,58 @@
       </column>
     </addColumn>
 
+    <createTable tableName="geofence">
+      <column name="id" type="INT" autoIncrement="true">
+        <constraints primaryKey="true" />
+      </column>
+      <column name="name" type="VARCHAR(128)">
+        <constraints nullable="false" />
+      </column>
+      <column name="coordinates" type="VARCHAR(1000)">
+        <constraints nullable="false" />
+      </column>
+      <column name="userid" type="INT">
+        <constraints nullable="false" />
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint baseTableName="geofence" baseColumnNames="userid" constraintName="fk_geofence_userid"
+                             referencedTableName="users" referencedColumnNames="id" onDelete="CASCADE" />
+
+    <createTable tableName="GeofenceEvent">
+      <column name="id" type="INT" autoIncrement="true">
+        <constraints primaryKey="true" />
+      </column>
+      <column name="geofenceId" type="INT"/>
+      <column name="time" type="DATE"/>
+      <column name="deviceId" type="INT"/>
+      <column name="longitude" type="DOUBLE"/>
+      <column name="latitude" type="DOUBLE"/>
+      <column name="inside" type="BOOLEAN"/>
+    </createTable>
+
+    <addForeignKeyConstraint baseTableName="GeofenceEvent" baseColumnNames="geofenceId"
+                             constraintName="fk_GeofenceEvent_geofenceId"
+                             referencedTableName="geofence" referencedColumnNames="id" onDelete="CASCADE" />
+
+    <addForeignKeyConstraint baseTableName="GeofenceEvent" baseColumnNames="deviceId"
+                             constraintName="fk_GeofenceEvent_deviceId"
+                             referencedTableName="devices" referencedColumnNames="id" onDelete="CASCADE" />
+
+    <createTable tableName="OverSpeedEvent">
+      <column name="id" type="INT" autoIncrement="true">
+        <constraints primaryKey="true" />
+      </column>
+      <column name="time" type="DATE"/>
+      <column name="deviceId" type="INT"/>
+      <column name="longitude" type="DOUBLE"/>
+      <column name="latitude" type="DOUBLE"/>
+      <column name="speed" type="DOUBLE"/>
+    </createTable>
+
+    <addForeignKeyConstraint baseTableName="OverSpeedEvent" baseColumnNames="deviceId"
+                             constraintName="fk_OverSpeedEvent_deviceId"
+                             referencedTableName="devices" referencedColumnNames="id" onDelete="CASCADE" />
+
   </changeSet>
 </databaseChangeLog>

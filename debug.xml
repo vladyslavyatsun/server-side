@@ -193,6 +193,24 @@
         UPDATE devices SET positionId = :id WHERE id = :deviceId;
     </entry>
 
+    <entry key='database.insertGeofence'>
+        INSERT INTO geofence (name, coordinates, userId)
+        VALUES (:name, :coordinates, :userId);
+    </entry>
+
+    <entry key='database.selectGeofenceAll'>
+        SELECT * FROM geofence;
+    </entry>
+
+    <entry key='database.selectGeofenceByUserId'>
+        SELECT * FROM geofence WHERE userId = :userId;
+    </entry>
+
+    <entry key='database.insertGeofenceEvent'>
+        INSERT INTO GeofenceEvent (geofenceId, time, deviceId, longitude, latitude, inside)
+        VALUES (:geofenceId, :time, :deviceId, :longitude, :latitude, :inside);
+    </entry>
+
     <!-- PROTOCOL CONFIG -->
 
     <entry key='gps103.port'>5001</entry>

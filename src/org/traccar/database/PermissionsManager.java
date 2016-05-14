@@ -144,4 +144,10 @@ public class PermissionsManager {
         }
     }
 
+    public void checkGepfence(long userId, long geofenceUserId) throws SecurityException {
+        if (userId != geofenceUserId) {
+            throw new SecurityException("Gepfence access denied");
+        }
+    }
+
 }

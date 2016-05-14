@@ -41,15 +41,7 @@ import org.traccar.api.CorsResponseFilter;
 import org.traccar.api.ObjectMapperProvider;
 import org.traccar.api.ResourceErrorHandler;
 import org.traccar.api.SecurityRequestFilter;
-import org.traccar.api.resource.CommandResource;
-import org.traccar.api.resource.DeviceResource;
-import org.traccar.api.resource.DevicePermissionResource;
-import org.traccar.api.resource.GroupPermissionResource;
-import org.traccar.api.resource.GroupResource;
-import org.traccar.api.resource.PositionResource;
-import org.traccar.api.resource.ServerResource;
-import org.traccar.api.resource.SessionResource;
-import org.traccar.api.resource.UserResource;
+import org.traccar.api.resource.*;
 import org.traccar.helper.Log;
 
 public class WebServer {
@@ -147,7 +139,8 @@ public class WebServer {
         resourceConfig.register(CorsResponseFilter.class);
         resourceConfig.registerClasses(ServerResource.class, SessionResource.class, CommandResource.class,
                 GroupPermissionResource.class, DevicePermissionResource.class, UserResource.class,
-                GroupResource.class, DeviceResource.class, PositionResource.class);
+                GroupResource.class, DeviceResource.class, PositionResource.class,
+                GeofenceResource.class);
         servletHandler.addServlet(new ServletHolder(new ServletContainer(resourceConfig)), "/*");
 
         handlers.addHandler(servletHandler);

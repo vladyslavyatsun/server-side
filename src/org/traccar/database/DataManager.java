@@ -41,13 +41,7 @@ import liquibase.resource.ResourceAccessor;
 import org.traccar.Config;
 import org.traccar.Context;
 import org.traccar.helper.Log;
-import org.traccar.model.Device;
-import org.traccar.model.Group;
-import org.traccar.model.GroupPermission;
-import org.traccar.model.DevicePermission;
-import org.traccar.model.Position;
-import org.traccar.model.Server;
-import org.traccar.model.User;
+import org.traccar.model.*;
 
 public class DataManager implements IdentityManager {
 
@@ -461,6 +455,47 @@ public class DataManager implements IdentityManager {
         QueryBuilder.create(dataSource, getQuery("database.updateServer"))
                 .setObject(server)
                 .executeUpdate();
+    }
+
+    public void addGeofence(Geofence geofence) throws SQLException {
+        geofence.setId(QueryBuilder.create(dataSource, getQuery("database.insertGeofence"), true)
+                .setObject(geofence)
+                .executeUpdate());
+    }
+
+    public Collection<Geofence> getAllGeofences() throws SQLException {
+        return QueryBuilder.create(dataSource, getQuery("database.selectGeofenceAll"))
+                .executeQuery();
+    }
+
+    public Collection<Geofence> getGeofencesByUserId(long userId) throws SQLException {
+        return QueryBuilder.create(dataSource, getQuery("database.selectGeofenceByUserId"))
+                .setLong("userId", userId)
+                .executeQuery();
+    }
+
+    public void updateGeofence(Geofence geofence) throws SQLException {
+        QueryBuilder.create(dataSource, getQuery("database.updateGeofence"))
+                .setObject(geofence)
+                .executeUpdate();
+    }
+
+    public Geofence getGeofenceById(long id) throws SQLException {
+        return QueryBuilder.create(dataSource, getQuery("database.selectGeofenceById"))
+                .setLong("id", id)
+                .executeQuerySingle();
+    }
+
+    public void removeGeofence(long id) throws SQLException {
+        QueryBuilder.create(dataSource, getQuery("database.deleteGeofence"))
+                .setLong("id", id)
+                .executeUpdate();
+    }
+
+    public void addGeofenceEvent(GeofenceEvent event) throws SQLException {
+        event.setId(QueryBuilder.create(dataSource, getQuery("database.insertGeofenceEvent"), true)
+                .setObject(event)
+                .executeUpdate());
     }
 
 }

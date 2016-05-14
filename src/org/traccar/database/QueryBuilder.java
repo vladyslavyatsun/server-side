@@ -18,6 +18,7 @@ package org.traccar.database;
 import java.io.StringReader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -36,8 +37,14 @@ import javax.json.Json;
 import javax.json.JsonReader;
 import javax.json.stream.JsonParsingException;
 import javax.sql.DataSource;
+
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import org.joda.time.LocalDate;
 import org.traccar.Context;
 import org.traccar.helper.Log;
+import org.traccar.model.Coordinate;
+import org.traccar.model.Geofence;
 import org.traccar.model.MiscFormatter;
 
 public final class QueryBuilder {
@@ -257,6 +264,11 @@ public final class QueryBuilder {
                         } else {
                             setString(name, MiscFormatter.toJsonString((Map) method.invoke(object)));
                         }
+                    } else if (method.getReturnType().equals(List.class)) {
+                        List<Coordinate> coordinates = (List<Coordinate>) method.invoke(object);
+                        setString(name, new GsonBuilder().create().toJson(coordinates));
+                    } else if (method.getReturnType().equals(LocalDate.class)) {
+                        setDate(name, ((LocalDate) method.invoke(object)).toDate());
                     }
                 } catch (IllegalAccessException | InvocationTargetException error) {
                     Log.warning(error);
@@ -441,6 +453,42 @@ public final class QueryBuilder {
             }
         }
         return 0;
+    }
+
+    public Collection<Geofence> executeQuery() throws SQLException {
+        List<Geofence> result = new LinkedList<>();
+        if (query != null) {
+
+            try {
+
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    while (resultSet.next()) {
+                        String coordinates = resultSet.getString("coordinates");
+                        Type type = new TypeToken<List<Coordinate>>() {}.getType();
+                        List<Coordinate> coordinateList = new GsonBuilder().create().fromJson(coordinates, type);
+
+                        result.add(new Geofence(resultSet.getInt("id"), resultSet.getString("name"),
+                                resultSet.getString("description"), Geofence.Type.valueOf(resultSet.getString("type")),
+                                coordinateList, resultSet.getDouble("radius"), resultSet.getInt("userid")));
+                    }
+                }
+
+            } finally {
+                statement.close();
+                connection.close();
+            }
+        }
+
+        return result;
+    }
+
+    public Geofence executeQuerySingle() throws SQLException {
+        Collection<Geofence> result = executeQuery();
+        if (!result.isEmpty()) {
+            return result.iterator().next();
+        } else {
+            return null;
+        }
     }
 
 }

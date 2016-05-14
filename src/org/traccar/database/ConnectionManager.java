@@ -35,6 +35,7 @@ import org.traccar.GlobalTimer;
 import org.traccar.Protocol;
 import org.traccar.helper.Log;
 import org.traccar.model.Device;
+import org.traccar.model.GeofenceEvent;
 import org.traccar.model.Position;
 
 public class ConnectionManager {
@@ -124,11 +125,27 @@ public class ConnectionManager {
     public synchronized void updatePosition(Position position) {
         long deviceId = position.getDeviceId();
         positions.put(deviceId, position);
+        long currentTime = System.currentTimeMillis();
 
         for (long userId : Context.getPermissionsManager().getDeviceUsers(deviceId)) {
             if (listeners.containsKey(userId)) {
+                GeofenceEvent geofenceEvent = null;
+                if (currentTime - Context.getGeofenceManager().getTimeout(userId) > GeofenceManager.GEOFENCE_TIMEOUT) {
+                    geofenceEvent = Context.getGeofenceManager().checkLocation(userId, position);
+                    if (geofenceEvent != null) {
+                        try {
+                            Context.getDataManager().addGeofenceEvent(geofenceEvent);
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    Context.getGeofenceManager().addTimeout(userId, currentTime);
+                }
                 for (UpdateListener listener : listeners.get(userId)) {
                     listener.onUpdatePosition(position);
+                    if (geofenceEvent != null) {
+                        listener.onChangeGeofence(geofenceEvent);
+                    }
                 }
             }
         }
@@ -154,6 +171,7 @@ public class ConnectionManager {
     public interface UpdateListener {
         void onUpdateDevice(Device device);
         void onUpdatePosition(Position position);
+        void onChangeGeofence(GeofenceEvent event);
     }
 
     public synchronized void addListener(long userId, UpdateListener listener) {
