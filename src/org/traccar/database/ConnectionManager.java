@@ -131,7 +131,7 @@ public class ConnectionManager {
             if (listeners.containsKey(userId)) {
                 GeofenceEvent geofenceEvent = null;
                 if (currentTime - Context.getGeofenceManager().getTimeout(userId) > GeofenceManager.GEOFENCE_TIMEOUT) {
-                    geofenceEvent = Context.getGeofenceManager().checkLocation(userId, position);
+                    /*geofenceEvent = Context.getGeofenceManager().checkLocation(userId, position);*/
                     if (geofenceEvent != null) {
                         try {
                             Context.getDataManager().addGeofenceEvent(geofenceEvent);
