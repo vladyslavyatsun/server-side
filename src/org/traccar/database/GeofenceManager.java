@@ -61,12 +61,12 @@ public class GeofenceManager {
                 }
                 geofenceData.setGeoF(geofence);
                 geofencesData.add(geofenceData);
+                timeouts.put(userId, System.currentTimeMillis());
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        timeouts.put(userId, System.currentTimeMillis());
         return geofencesData;
     }
 
@@ -79,19 +79,13 @@ public class GeofenceManager {
     public GeofenceData getNearestGeofence(Set<GeofenceData> geofenceDataSet, Position position) {
         GeofenceData nearestGeofence = null;
         HashMap<Long, Double> distances = new HashMap<>();
-        try {
-
-            for (GeofenceData geofenceData : geofenceDataSet) {
-                Coordinate pos = new Coordinate(position.getLongitude(), position.getLatitude());
-                double dist = GeofenceData.distFrom(geofenceData.getCentroid(), pos);
-                distances.put(geofenceData.getGeoF().getId(), dist);
-                if (dist == Collections.min(distances.values())) {
-                    nearestGeofence = geofenceData;
-                }
+        for (GeofenceData geofenceData : geofenceDataSet) {
+            Coordinate pos = new Coordinate(position.getLongitude(), position.getLatitude());
+            double dist = GeofenceData.distFrom(geofenceData.getCentroid(), pos);
+            distances.put(geofenceData.getGeoF().getId(), dist);
+            if (dist == Collections.min(distances.values())) {
+                nearestGeofence = geofenceData;
             }
-        } catch (Throwable e) {
-            Log.warning("~~~~Hello``````````````````````````");
-            Log.warning(e.getMessage());
         }
 
         return nearestGeofence;
@@ -148,5 +142,9 @@ public class GeofenceManager {
 
     public Long addTimeout(long userId, long currentTime) {
         return timeouts.put(userId, currentTime);
+    }
+
+    public boolean containsGeofences(long userId) {
+        return geofences.containsKey(userId);
     }
 }
