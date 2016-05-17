@@ -26,7 +26,7 @@ public class GeofenceManager {
      */
     public Set<GeofenceData> loadGeofence(long userId) {
 
-        Set<GeofenceData> geofencesData = null;
+        Set<GeofenceData> geofencesData = new HashSet<>();
         try {
             List<Geofence> geofences = (List<Geofence>) Context.getDataManager().getGeofencesByUserId(userId);
             // transform all geofences to GeofenceData objects
@@ -44,7 +44,7 @@ public class GeofenceManager {
                             true);
 
                     geofenceData = new GeofenceData(circle, geofence.getRadius(),
-                            geofence.getCoordinates().get(0), geofence.getUserId());
+                            geofence.getCoordinates().get(0), geofence.getUserId(), geofence);
                 }
                 else {
                     Path2D polygon = new Path2D.Double();
@@ -57,7 +57,7 @@ public class GeofenceManager {
                             polygon.lineTo(coordinate.getLongitude(), coordinate.getLatitude());
                         }
                     }
-                    geofenceData = new GeofenceData(polygon, geofence.getUserId());
+                    geofenceData = new GeofenceData(polygon, geofence.getUserId(), geofence);
                 }
                 geofenceData.setGeoF(geofence);
                 geofencesData.add(geofenceData);
