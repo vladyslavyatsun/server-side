@@ -498,4 +498,10 @@ public class DataManager implements IdentityManager {
                 .executeUpdate());
     }
 
+    public Collection<AbstractEvent> getEventsByDeviceId(long deviceId) throws SQLException {
+        return QueryBuilder.create(dataSource, getQuery("database.selectEventsByDeviceId"))
+                .setLong("deviceId", deviceId)
+                .executeQuery(AbstractEvent.class);
+    }
+
 }
