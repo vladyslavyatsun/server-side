@@ -211,7 +211,7 @@
         VALUES (:geofenceId, :time, :deviceId, :longitude, :latitude, :inside);
     </entry>
 
-    <entry key='database.selectEventsByDeviceId'>
+    <entry key='database.selectGeofenceEventByDeviceId'>
         SELECT * FROM GeofenceEvent WHERE deviceId = :deviceId;
     </entry>
 
