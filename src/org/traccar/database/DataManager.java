@@ -498,4 +498,10 @@ public class DataManager implements IdentityManager {
                 .executeUpdate());
     }
 
+    public Collection<GeofenceEvent> getGeofenceEvents(long deviceId) throws SQLException {
+        return QueryBuilder.create(dataSource, getQuery("database.selectGeofenceEventByDeviceId"))
+                .setLong("deviceId", deviceId)
+                .executeQuery(GeofenceEvent.class);
+    }
+
 }

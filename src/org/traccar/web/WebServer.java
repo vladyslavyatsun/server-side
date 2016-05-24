@@ -140,7 +140,7 @@ public class WebServer {
         resourceConfig.registerClasses(ServerResource.class, SessionResource.class, CommandResource.class,
                 GroupPermissionResource.class, DevicePermissionResource.class, UserResource.class,
                 GroupResource.class, DeviceResource.class, PositionResource.class,
-                GeofenceResource.class);
+                GeofenceResource.class, GeofenceEventResource.class);
         servletHandler.addServlet(new ServletHolder(new ServletContainer(resourceConfig)), "/*");
 
         handlers.addHandler(servletHandler);

@@ -49,7 +49,7 @@ public class AsyncSocket extends WebSocketAdapter implements ConnectionManager.U
 
         Context.getConnectionManager().addListener(userId, this);
 
-        if (Context.getGeofenceManager().getGeofences(userId) == null) {
+        if (Context.getGeofenceManager().containsGeofences(userId)) {
             Context.getGeofenceManager().loadGeofence(userId);
         }
     }

@@ -45,6 +45,10 @@ public class GeofenceEvent extends AbstractEvent {
         return inside;
     }
 
+    public boolean getInside() {
+        return inside;
+    }
+
     public void setInside(boolean inside) {
         this.inside = inside;
     }

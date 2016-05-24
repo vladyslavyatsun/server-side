@@ -18,16 +18,18 @@ public class GeofenceData {
 
     private Geofence geoF;
 
-    public GeofenceData(Path2D shape, long userId) {
+    public GeofenceData(Path2D shape, long userId, Geofence geofence) {
         this.shape = shape;
         this.userId = userId;
+        this.geoF = geofence;
         setCentroid();
     }
 
-    public GeofenceData(Path2D shape, double range, Coordinate center, long userId) {
+    public GeofenceData(Path2D shape, double range, Coordinate center, long userId, Geofence geofence) {
         this.shape = shape;
         this.range = range;
         this.centroid = center;
+        this.geoF = geofence;
     }
 
     public long getUserId() {

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <databaseChangeLog
-  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
   <changeSet author="author" id="changelog-3.5">
@@ -84,9 +84,13 @@
       <column name="id" type="INT" autoIncrement="true">
         <constraints primaryKey="true" />
       </column>
-      <column name="geofenceId" type="INT"/>
+      <column name="geofenceId" type="INT">
+        <constraints nullable="false" />
+      </column>
       <column name="time" type="DATE"/>
-      <column name="deviceId" type="INT"/>
+      <column name="deviceId" type="INT">
+        <constraints nullable="false" />
+      </column>
       <column name="longitude" type="DOUBLE"/>
       <column name="latitude" type="DOUBLE"/>
       <column name="inside" type="BOOLEAN"/>
@@ -96,9 +100,9 @@
                              constraintName="fk_GeofenceEvent_geofenceId"
                              referencedTableName="geofence" referencedColumnNames="id" onDelete="CASCADE" />
 
-    <addForeignKeyConstraint baseTableName="GeofenceEvent" baseColumnNames="deviceId"
+    <!--<addForeignKeyConstraint baseTableName="GeofenceEvent" baseColumnNames="deviceId"
                              constraintName="fk_GeofenceEvent_deviceId"
-                             referencedTableName="devices" referencedColumnNames="id" onDelete="CASCADE" />
+                             referencedTableName="devices" referencedColumnNames="id" onDelete="CASCADE" />-->
 
     <createTable tableName="OverSpeedEvent">
       <column name="id" type="INT" autoIncrement="true">
