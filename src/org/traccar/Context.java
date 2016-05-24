@@ -17,19 +17,14 @@ package org.traccar;
 
 import com.ning.http.client.AsyncHttpClient;
 import org.traccar.database.*;
-import org.traccar.geocode.BingMapsReverseGeocoder;
-import org.traccar.geocode.FactualReverseGeocoder;
-import org.traccar.geocode.GisgraphyReverseGeocoder;
-import org.traccar.geocode.GoogleReverseGeocoder;
-import org.traccar.geocode.MapQuestReverseGeocoder;
-import org.traccar.geocode.NominatimReverseGeocoder;
-import org.traccar.geocode.OpenCageReverseGeocoder;
-import org.traccar.geocode.ReverseGeocoder;
+import org.traccar.geocode.*;
 import org.traccar.helper.Log;
 import org.traccar.location.LocationProvider;
 import org.traccar.location.MozillaLocationProvider;
 import org.traccar.location.OpenCellIdLocationProvider;
 import org.traccar.web.WebServer;
+
+import javax.servlet.http.HttpSession;
 
 public final class Context {
 
@@ -106,6 +101,17 @@ public final class Context {
 
     public static GeofenceManager getGeofenceManager() {
         return geofenceManager;
+    }
+
+    //Добавив сесію для зберігання і методи доступу
+    private static HttpSession httpSession;
+
+    public static HttpSession getHttpSession() {
+        return httpSession;
+    }
+
+    public static void setHttpSession(HttpSession httpSession) {
+        Context.httpSession = httpSession;
     }
 
     public static void init(String[] arguments) throws Exception {
