@@ -215,6 +215,18 @@
         SELECT * FROM GeofenceEvent WHERE deviceId = :deviceId;
     </entry>
 
+    <entry key='database.selectGeofenceById'>
+        SELECT * FROM geofence WHERE id = :id;
+    </entry>
+
+    <entry key='database.updateGeofence'>
+        UPDATE geofence SET name = :name, description = :description, type = :type, coordinates = :coordinates, radius = :radius, userId = :userId WHERE id = :id;
+    </entry>
+
+    <entry key='database.deleteGeofence'>
+        DELETE FROM geofence WHERE id = :id;
+    </entry>
+
     <!-- PROTOCOL CONFIG -->
 
     <entry key='gps103.port'>5001</entry>
