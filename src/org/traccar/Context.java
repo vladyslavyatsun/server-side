@@ -183,6 +183,7 @@ public final class Context {
 
         geofenceManager = new GeofenceManager();
 
+
         serverManager = new ServerManager();
     }
 

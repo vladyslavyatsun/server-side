@@ -48,7 +48,6 @@ public class AsyncSocket extends WebSocketAdapter implements ConnectionManager.U
         sendData(KEY_POSITIONS, Context.getConnectionManager().getInitialState(userId));
 
         Context.getConnectionManager().addListener(userId, this);
-
         if (Context.getGeofenceManager().containsGeofences(userId)) {
             Context.getGeofenceManager().loadGeofence(userId);
         }

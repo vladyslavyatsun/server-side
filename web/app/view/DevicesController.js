@@ -88,7 +88,7 @@ Ext.define('Traccar.view.DevicesController', {
         dialog.down('form').loadRecord(command);
         dialog.show();
     },
-
+    
     onSelectionChange: function (selected) {
         var empty = selected.getCount() === 0;
         this.lookupReference('toolbarEditButton').setDisabled(empty);

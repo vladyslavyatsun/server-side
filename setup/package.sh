@@ -22,10 +22,17 @@ check_requirement () {
   fi 
 }
 
+<<<<<<< HEAD
 check_requirement "ls ../../ext-*" "Missing ../../ext-X.X.X (https://www.sencha.com/legal/GPL/)"
 check_requirement "ls wrapper-delta-pack-*.tar.gz" "Missing wrapper-delta-pack-*.tar.gz (http://wrapper.tanukisoftware.com/doc/english/download.jsp)"
 check_requirement "ls wrapper-windows-x86-64-*.zip" "Missing wrapper-windows-x86-64-*.zip (http://www.krenger.ch/blog/tag/java-service-wrapper/)"
 check_requirement "ls isetup-*.exe" "Missing isetup-*.exe (http://www.jrsoftware.org/isdl.php)"
+=======
+check_requirement "ls ../../ext-6.0.1" "Missing ../../ext-6.0.1 (https://www.sencha.com/legal/GPL/)"
+check_requirement "ls wrapper-delta-pack-*.tar.gz" "Missing wrapper-delta-pack-*.tar.gz (http://wrapper.tanukisoftware.com/doc/english/download.jsp)"
+check_requirement "ls wrapper-windows-x86-64-*.zip" "Missing wrapper-windows-x86-64-*.zip (http://www.krenger.ch/blog/tag/java-service-wrapper/)"
+check_requirement "ls innosetup-*.exe" "Missing isetup-*.exe (http://www.jrsoftware.org/isdl.php)"
+>>>>>>> 191caf45e9e42fa2ec43d6ec756bb7212ecaca8d
 check_requirement "which sencha" "Missing sencha cmd package (https://www.sencha.com/products/extjs/cmd-download/)"
 check_requirement "which wine" "Missing wine package"
 check_requirement "which innoextract" "Missing innoextract package"
@@ -38,7 +45,11 @@ prepare () {
 
   ../tools/minify.sh
 
+<<<<<<< HEAD
   innoextract isetup-*.exe
+=======
+  innoextract innosetup-*.exe
+>>>>>>> 191caf45e9e42fa2ec43d6ec756bb7212ecaca8d
   echo "If you got any errors here try isetup version 5.5.5 (or check what versions are supported by 'innoextract -v')"
 }
 

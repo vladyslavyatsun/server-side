@@ -15,13 +15,6 @@
  */
 package org.traccar.web;
 
-import java.io.IOException;
-import java.io.Writer;
-import java.net.InetSocketAddress;
-import javax.naming.InitialContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.sql.DataSource;
-
 import org.eclipse.jetty.http.HttpStatus;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.SessionManager;
@@ -36,13 +29,16 @@ import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.servlet.ServletContainer;
 import org.traccar.Config;
-import org.traccar.api.AsyncSocketServlet;
-import org.traccar.api.CorsResponseFilter;
-import org.traccar.api.ObjectMapperProvider;
-import org.traccar.api.ResourceErrorHandler;
-import org.traccar.api.SecurityRequestFilter;
+import org.traccar.api.*;
 import org.traccar.api.resource.*;
 import org.traccar.helper.Log;
+
+import javax.naming.InitialContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.sql.DataSource;
+import java.io.IOException;
+import java.io.Writer;
+import java.net.InetSocketAddress;
 
 public class WebServer {
 
