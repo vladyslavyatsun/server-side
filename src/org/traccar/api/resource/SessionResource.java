@@ -43,6 +43,7 @@ public class SessionResource extends BaseResource {
     @javax.ws.rs.core.Context
     private HttpServletRequest request;
 
+
     @PermitAll
     @GET
     public User get() throws SQLException {
@@ -61,6 +62,7 @@ public class SessionResource extends BaseResource {
         User user = Context.getDataManager().login(email, password);
         if (user != null) {
             request.getSession().setAttribute(USER_ID_KEY, user.getId());
+            Context.setHttpSession(request.getSession());
             return user;
         } else {
             throw new WebApplicationException(Response.status(Response.Status.UNAUTHORIZED).build());

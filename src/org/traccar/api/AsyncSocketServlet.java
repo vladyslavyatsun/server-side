@@ -15,13 +15,11 @@
  */
 package org.traccar.api;
 
-import org.eclipse.jetty.websocket.servlet.ServletUpgradeRequest;
-import org.eclipse.jetty.websocket.servlet.ServletUpgradeResponse;
-import org.eclipse.jetty.websocket.servlet.WebSocketCreator;
-import org.eclipse.jetty.websocket.servlet.WebSocketServlet;
-import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
+import org.eclipse.jetty.websocket.servlet.*;
 import org.traccar.Context;
 import org.traccar.api.resource.SessionResource;
+
+import javax.servlet.http.HttpSession;
 
 public class AsyncSocketServlet extends WebSocketServlet {
 
@@ -29,16 +27,20 @@ public class AsyncSocketServlet extends WebSocketServlet {
 
     @Override
     public void configure(WebSocketServletFactory factory) {
-        /*factory.getPolicy().setIdleTimeout(Context.getConfig().getLong("web.timeout", ASYNC_TIMEOUT));*/
+        //factory.getPolicy().setIdleTimeout(Context.getConfig().getLong("web.timeout", ASYNC_TIMEOUT));
         factory.setCreator(new WebSocketCreator() {
             @Override
             public Object createWebSocket(ServletUpgradeRequest req, ServletUpgradeResponse resp) {
-                if (req.getSession() != null) {
-                    long userId = (Long) req.getSession().getAttribute(SessionResource.USER_ID_KEY);
+                //Отримуємо сесію з Context, для роботи сокетів
+                HttpSession session = Context.getHttpSession();
+                if (session != null) {
+                    //long userId = (Long) req.getSession().getAttribute(SessionResource.USER_ID_KEY);
+                    long userId = (Long) session.getAttribute(SessionResource.USER_ID_KEY);
                     return new AsyncSocket(userId);
                 } else {
                     return null;
                 }
+
             }
         });
     }

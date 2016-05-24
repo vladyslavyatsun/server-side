@@ -2,6 +2,7 @@ package org.traccar.api.resource;
 
 import org.traccar.Context;
 import org.traccar.api.BaseResource;
+import org.traccar.helper.Log;
 import org.traccar.model.Geofence;
 
 import javax.ws.rs.*;
@@ -51,7 +52,6 @@ public class GeofenceResource extends BaseResource {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         Context.getPermissionsManager().checkGepfence(getUserId(), geofence.getUserId());
-
         Context.getDataManager().removeGeofence(id);
         return Response.noContent().build();
     }
