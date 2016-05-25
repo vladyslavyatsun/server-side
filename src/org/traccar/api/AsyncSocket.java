@@ -19,6 +19,7 @@ import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketAdapter;
 import org.traccar.Context;
 import org.traccar.database.ConnectionManager;
+import org.traccar.helper.Log;
 import org.traccar.model.Device;
 import org.traccar.model.GeofenceEvent;
 import org.traccar.model.Position;
@@ -26,6 +27,7 @@ import org.traccar.web.JsonConverter;
 
 import javax.json.Json;
 import javax.json.JsonObjectBuilder;
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -34,6 +36,7 @@ public class AsyncSocket extends WebSocketAdapter implements ConnectionManager.U
     private static final String KEY_DEVICES = "devices";
     private static final String KEY_POSITIONS = "positions";
     private static final String KEY_GEOFENCE = "geofence";
+    private static final String KEY_FIRST = "first";
 
     private long userId;
 
@@ -44,9 +47,9 @@ public class AsyncSocket extends WebSocketAdapter implements ConnectionManager.U
     @Override
     public void onWebSocketConnect(Session session) {
         super.onWebSocketConnect(session);
-
+       // getRemote().sendString("Hello WOrlds", null);
+        sendAllDevices();
         sendData(KEY_POSITIONS, Context.getConnectionManager().getInitialState(userId));
-
         Context.getConnectionManager().addListener(userId, this);
         if (Context.getGeofenceManager().containsGeofences(userId)) {
             Context.getGeofenceManager().loadGeofence(userId);
@@ -68,6 +71,14 @@ public class AsyncSocket extends WebSocketAdapter implements ConnectionManager.U
     @Override
     public void onUpdatePosition(Position position) {
         sendData(KEY_POSITIONS, Collections.singletonList(position));
+    }
+
+    private void sendAllDevices() {
+        try {
+            sendData(KEY_FIRST, Context.getDataManager().getAllDevices());
+        } catch (SQLException e) {
+            Log.warning("Can't get users from DB");
+        }
     }
 
     private void sendData(String key, Collection<?> data) {

@@ -102,7 +102,7 @@ public final class Context {
     public static GeofenceManager getGeofenceManager() {
         return geofenceManager;
     }
-
+    
     //Добавив сесію для зберігання і методи доступу
     private static HttpSession httpSession;
 
