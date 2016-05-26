@@ -28,6 +28,7 @@ import org.traccar.web.JsonConverter;
 import javax.json.Json;
 import javax.json.JsonObjectBuilder;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -47,8 +48,15 @@ public class AsyncSocket extends WebSocketAdapter implements ConnectionManager.U
     @Override
     public void onWebSocketConnect(Session session) {
         super.onWebSocketConnect(session);
-        getRemote().sendString("Hello WOrlds", null);
-        sendAllDevices();
+        try {
+            boolean isAdmin = Context.getDataManager().getUser(userId).getAdmin();
+            if (isAdmin) {
+                sendAllDevices();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         sendData(KEY_POSITIONS, Context.getConnectionManager().getInitialState(userId));
         Context.getConnectionManager().addListener(userId, this);
         if (Context.getGeofenceManager().containsGeofences(userId)) {
@@ -59,7 +67,6 @@ public class AsyncSocket extends WebSocketAdapter implements ConnectionManager.U
     @Override
     public void onWebSocketClose(int statusCode, String reason) {
         super.onWebSocketClose(statusCode, reason);
-
         Context.getConnectionManager().removeListener(userId, this);
     }
 
@@ -70,6 +77,16 @@ public class AsyncSocket extends WebSocketAdapter implements ConnectionManager.U
 
     @Override
     public void onUpdatePosition(Position position) {
+        StringBuilder s = new StringBuilder();
+        s.append("Sending via socket");
+        s.append("id: ").append(position.getDeviceId()).append(", ");
+        s.append("time: ").append(
+                new SimpleDateFormat(Log.DATE_FORMAT).format(position.getFixTime())).append(", ");
+        s.append("lat: ").append(String.format("%.5f", position.getLatitude())).append(", ");
+        s.append("lon: ").append(String.format("%.5f", position.getLongitude())).append(", ");
+        s.append("speed: ").append(String.format("%.1f", position.getSpeed())).append(", ");
+        s.append("course: ").append(String.format("%.1f", position.getCourse()));
+        Log.info(s.toString());
         sendData(KEY_POSITIONS, Collections.singletonList(position));
     }
 

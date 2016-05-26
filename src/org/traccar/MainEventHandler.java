@@ -15,16 +15,13 @@
  */
 package org.traccar;
 
-import org.jboss.netty.channel.Channel;
-import org.jboss.netty.channel.ChannelHandlerContext;
-import org.jboss.netty.channel.ChannelStateEvent;
-import org.jboss.netty.channel.ExceptionEvent;
-import org.jboss.netty.channel.MessageEvent;
+import org.jboss.netty.channel.*;
 import org.jboss.netty.channel.socket.DatagramChannel;
 import org.jboss.netty.handler.timeout.IdleStateAwareChannelHandler;
 import org.jboss.netty.handler.timeout.IdleStateEvent;
 import org.traccar.helper.Log;
 import org.traccar.model.Position;
+
 import java.text.SimpleDateFormat;
 
 public class MainEventHandler extends IdleStateAwareChannelHandler {
@@ -38,6 +35,7 @@ public class MainEventHandler extends IdleStateAwareChannelHandler {
 
             // Log position
             StringBuilder s = new StringBuilder();
+            s.append("Receiving message from tracker");
             s.append(formatChannel(e.getChannel())).append(" ");
             s.append("id: ").append(position.getDeviceId()).append(", ");
             s.append("time: ").append(
@@ -47,7 +45,6 @@ public class MainEventHandler extends IdleStateAwareChannelHandler {
             s.append("speed: ").append(String.format("%.1f", position.getSpeed())).append(", ");
             s.append("course: ").append(String.format("%.1f", position.getCourse()));
             Log.info(s.toString());
-
             Position lastPosition = Context.getConnectionManager().getLastPosition(position.getDeviceId());
             if (lastPosition == null || position.getFixTime().compareTo(lastPosition.getFixTime()) > 0) {
                 Context.getConnectionManager().updatePosition(position);

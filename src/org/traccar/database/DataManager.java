@@ -16,21 +16,6 @@
 package org.traccar.database;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
-import java.io.File;
-import java.lang.reflect.Method;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
-import javax.naming.InitialContext;
-import javax.sql.DataSource;
-
 import liquibase.Contexts;
 import liquibase.Liquibase;
 import liquibase.database.Database;
@@ -42,6 +27,18 @@ import org.traccar.Config;
 import org.traccar.Context;
 import org.traccar.helper.Log;
 import org.traccar.model.*;
+
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
+import java.io.File;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class DataManager implements IdentityManager {
 
@@ -428,10 +425,22 @@ public class DataManager implements IdentityManager {
     }
 
     public void addPosition(Position position) throws SQLException {
+
         position.setId(QueryBuilder.create(dataSource, getQuery("database.insertPosition"), true)
                 .setDate("now", new Date())
                 .setObject(position)
                 .executeUpdate());
+        StringBuilder s = new StringBuilder();
+        s.append("Saving to DB: ");
+        s.append("idDevice: ").append(position.getDeviceId()).append(", ");
+        s.append("id: ").append(position.getId());
+        s.append("time: ").append(
+                new SimpleDateFormat(Log.DATE_FORMAT).format(position.getFixTime())).append(", ");
+        s.append("lat: ").append(String.format("%.5f", position.getLatitude())).append(", ");
+        s.append("lon: ").append(String.format("%.5f", position.getLongitude())).append(", ");
+        s.append("speed: ").append(String.format("%.1f", position.getSpeed())).append(", ");
+        s.append("course: ").append(String.format("%.1f", position.getCourse()));
+        Log.info(s.toString());
     }
 
     public void updateLatestPosition(Position position) throws SQLException {
