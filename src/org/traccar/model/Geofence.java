@@ -1,8 +1,5 @@
 package org.traccar.model;
 
-
-import java.util.List;
-
 public class Geofence {
 
     private long id;
@@ -13,7 +10,12 @@ public class Geofence {
 
     private Type type;
 
-    private List<Coordinate> coordinates;
+    /**
+     * Have been changed type
+     * from List<Coordinate> to Coordinate[]
+     * to parse on client side with GWT GSON
+     */
+    private Coordinate[] coordinates;
 
     private double radius;
 
@@ -30,7 +32,7 @@ public class Geofence {
     public Geofence() {
     }
 
-    public Geofence(long id, String name, String description, Type type, List<Coordinate> coordinates, double radius, int userId) {
+    public Geofence(long id, String name, String description, Type type, Coordinate[] coordinates, double radius, int userId) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -72,11 +74,11 @@ public class Geofence {
         this.type = type;
     }
 
-    public List<Coordinate> getCoordinates() {
+    public Coordinate[] getCoordinates() {
         return coordinates;
     }
 
-    public void setCoordinates(List<Coordinate> coordinates) {
+    public void setCoordinates(Coordinate[] coordinates) {
         this.coordinates = coordinates;
     }
 

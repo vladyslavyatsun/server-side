@@ -72,7 +72,7 @@ public class GeofenceData {
      */
     public void setRange() {
 
-        List<Coordinate> coordinates = geoF.getCoordinates();
+        Coordinate[] coordinates = geoF.getCoordinates();
         List distances = new ArrayList();
         for (Coordinate coordinate : coordinates) {
             double dist = distFrom(centroid, coordinate);
@@ -124,17 +124,17 @@ public class GeofenceData {
     public void setCentroid() {
 
         double cx = 0, cy = 0;
-        List<Coordinate> polyPoints = geoF.getCoordinates();
+        Coordinate[] polyPoints = geoF.getCoordinates();
         double area = area();
-        int i, j, n = polyPoints.size();
+        int i, j, n = polyPoints.length;
 
         double factor = 0;
         for (i = 0; i < n; i++) {
             j = (i + 1) % n;
-            factor = (polyPoints.get(i).getLongitude() * polyPoints.get(j).getLatitude()
-                    - polyPoints.get(j).getLongitude() * polyPoints.get(i).getLatitude());
-            cx += (polyPoints.get(i).getLongitude() + polyPoints.get(j).getLongitude()) * factor;
-            cy += (polyPoints.get(i).getLatitude() + polyPoints.get(j).getLatitude()) * factor;
+            factor = (polyPoints[i].getLongitude() * polyPoints[j].getLatitude()
+                    - polyPoints[j].getLongitude() * polyPoints[i].getLatitude());
+            cx += (polyPoints[i].getLongitude() + polyPoints[j].getLongitude()) * factor;
+            cy += (polyPoints[i].getLatitude() + polyPoints[j].getLatitude()) * factor;
         }
         area *= 6.0f;
         factor = 1 / area;
@@ -150,14 +150,14 @@ public class GeofenceData {
      */
     public double area() {
 
-        List<Coordinate> polyPoints = geoF.getCoordinates();
-        int i, j, n = polyPoints.size();
+        Coordinate[] polyPoints = geoF.getCoordinates();
+        int i, j, n = polyPoints.length;
         double area = 0;
 
         for (i = 0; i < n; i++) {
             j = (i + 1) % n;
-            area += polyPoints.get(i).getLongitude() * polyPoints.get(i).getLatitude();
-            area -= polyPoints.get(j).getLongitude() * polyPoints.get(j).getLatitude();
+            area += polyPoints[i].getLongitude() * polyPoints[i].getLatitude();
+            area -= polyPoints[j].getLongitude() * polyPoints[j].getLatitude();
         }
         area /= 2.0;
         return (area);
