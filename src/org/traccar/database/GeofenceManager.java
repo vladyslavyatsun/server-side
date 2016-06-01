@@ -37,18 +37,18 @@ public class GeofenceManager {
                 if (geofence.getType() == Geofence.Type.CIRCLE) {
                     Path2D circle = new Path2D.Double();
                     // appends circle as a shape
-                    circle.append(new Ellipse2D.Double(geofence.getCoordinates().get(0).getLongitude(),
-                                    geofence.getCoordinates().get(0).getLatitude(),
+                    circle.append(new Ellipse2D.Double(geofence.getCoordinates()[0].getLongitude(),
+                                    geofence.getCoordinates()[0].getLatitude(),
                                     geofence.getRadius(),
                                     geofence.getRadius()),
                             true);
 
                     geofenceData = new GeofenceData(circle, geofence.getRadius(),
-                            geofence.getCoordinates().get(0), geofence.getUserId(), geofence);
+                            geofence.getCoordinates()[0], geofence.getUserId(), geofence);
                 }
                 else {
                     Path2D polygon = new Path2D.Double();
-                    List<Coordinate> coordinates = geofence.getCoordinates();
+                    Coordinate[] coordinates = geofence.getCoordinates();
                     for (Coordinate coordinate : coordinates) {
                         // add point by point from geofence to polygon
                         if (polygon.getCurrentPoint() == null) {

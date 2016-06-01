@@ -467,7 +467,7 @@ public final class QueryBuilder {
                     while (resultSet.next()) {
                         String coordinates = resultSet.getString("coordinates");
                         Type type = new TypeToken<List<Coordinate>>() {}.getType();
-                        List<Coordinate> coordinateList = new GsonBuilder().create().fromJson(coordinates, type);
+                        Coordinate[] coordinateList = new GsonBuilder().create().fromJson(coordinates, type);
 
                         result.add(new Geofence(resultSet.getInt("id"), resultSet.getString("name"),
                                 resultSet.getString("description"), Geofence.Type.valueOf(resultSet.getString("type")),
