@@ -183,5 +183,11 @@
       <column name="admin" valueBoolean="true" />
     </insert>
 
+    <insert tableName="devices">
+      <column name="name" value="testCar" />
+      <column name="uniqueId" value="8498498" />
+      <column name="status" value="online" />
+    </insert>
+
   </changeSet>
 </databaseChangeLog>

@@ -124,6 +124,11 @@
             <artifactId>joda-time</artifactId>
             <version>${joda.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.discotools.gwt.leaflet</groupId>
+            <artifactId>gwtl</artifactId>
+            <version>LATEST</version>
+        </dependency>
     </dependencies>
 
     <build>

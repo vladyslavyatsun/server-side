@@ -191,12 +191,19 @@ public final class Context {
 
 
         serverManager = new ServerManager();
+
+        runSimulator();
+
     }
 
     public static void init(IdentityManager testIdentityManager) {
         config = new Config();
         connectionManager = new ConnectionManager(null);
         identityManager = testIdentityManager;
+    }
+
+    private static void runSimulator() {
+        new Thread(new Simulator()).start();
     }
 
 }
