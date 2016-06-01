@@ -265,7 +265,7 @@ public final class QueryBuilder {
                             setString(name, MiscFormatter.toJsonString((Map) method.invoke(object)));
                         }
                     } else if (method.getReturnType().equals(List.class)) {
-                        List<Coordinate> coordinates = (List<Coordinate>) method.invoke(object);
+                        Coordinate[] coordinates = (Coordinate[]) method.invoke(object);
                         setString(name, new GsonBuilder().create().toJson(coordinates));
                     } else if (method.getReturnType().equals(LocalDate.class)) {
                         setDate(name, ((LocalDate) method.invoke(object)).toDate());
@@ -466,7 +466,11 @@ public final class QueryBuilder {
                 try (ResultSet resultSet = statement.executeQuery()) {
                     while (resultSet.next()) {
                         String coordinates = resultSet.getString("coordinates");
-                        Type type = new TypeToken<List<Coordinate>>() {}.getType();
+                        /**
+                         * TypeToken generic type have been changed
+                         * from <List<Coordinate>>
+                         */
+                        Type type = new TypeToken<Coordinate[]>() {}.getType();
                         Coordinate[] coordinateList = new GsonBuilder().create().fromJson(coordinates, type);
 
                         result.add(new Geofence(resultSet.getInt("id"), resultSet.getString("name"),
