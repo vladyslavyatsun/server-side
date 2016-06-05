@@ -51,7 +51,7 @@ public class Simulator implements Runnable {
     }
 
     private List<Position> loadPositions() {
-        try (BufferedReader br = new BufferedReader(new FileReader("test_positions"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("/test_positions"))) {
             StringBuilder sb = new StringBuilder();
             String line = br.readLine();
 
