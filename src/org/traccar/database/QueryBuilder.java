@@ -264,7 +264,7 @@ public final class QueryBuilder {
                         } else {
                             setString(name, MiscFormatter.toJsonString((Map) method.invoke(object)));
                         }
-                    } else if (method.getReturnType().equals(List.class)) {
+                    } else if (method.getReturnType().equals(Coordinate[].class)) {
                         Coordinate[] coordinates = (Coordinate[]) method.invoke(object);
                         setString(name, new GsonBuilder().create().toJson(coordinates));
                     } else if (method.getReturnType().equals(LocalDate.class)) {
